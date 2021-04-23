@@ -1,0 +1,221 @@
+\documentclass[a4paper, twocolumn]{article}
+
+\usepackage{polyglossia,hyphenat}
+\setmainlanguage{greek}
+
+\usepackage{fontspec}
+\setmainfont{Linux Libertine O}
+\setsansfont{Linux Biolinum O}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{physics}
+
+
+\title{Μητρωική Στατική\\
+\Large Σημειώσεις}
+\date{}
+
+
+\newcommand{\num}[1]{ N_{\mathit{#1}} }
+\newcommand{\R}[1]{ \mathbb{R}^{#1} }
+\newcommand{\gs}{\mathcal{G}}
+\newcommand{\ls}{\mathcal{L}_i}
+\newcommand{\vect}[1]{ \{ #1\} }
+\newcommand{\mat}[1]{\left[ #1 \right]}
+\newcommand{\gtol}{\mat{\Lambda^i}}
+
+\newcommand{\lstiff}[1]{\mat{k^{\mathit{#1}}}}
+\newcommand{\gstiff}[1]{\mat{\bar{k}^{\mathit{#1}}}}
+\newcommand{\Gstiff}[1]{\mat{\bar{K}^{\mathit{#1}}}}
+\newcommand{\gforce}[1]{\vect{\bar{P}^{\mathit{#1}}}}
+\newcommand{\gdisp}[1]{\vect{\bar{D}^{\mathit{#1}}}}
+
+\newcommand{\subk}[1]{ \mat{\bar{K}_{\mathit{#1}}} }
+\newcommand{\subp}[1]{\vect{\bar{P}_{\mathit{#1}}}}
+\newcommand{\subd}[1]{\vect{\bar{D}_{\mathit{#1}}}}
+
+\begin{document}
+\maketitle
+
+\section{Βασική μέθοδος}
+
+\subsection{Συστήματα αναφοράς}
+Πριν ξεκινήσουμε οποιαδήποτε διαδικασία επίλυσης, μελετούμε καλά τον 
+φορέα και επιλέγουμε \emph{τύπο} στοιχείων/μελών ανάλογα με το 
+πρόβλημα που μας δίδεται (π.χ. στοιχείο δοκού 2Δ, δικτυώματος 3Δ 
+κλπ.).
+\begin{enumerate}
+	\item Oρίζουμε το \emph{Καθολικό Σύστημα Αναφοράς} $\gs$.
+	\item Αριθμούμε τους \emph{κόμβους}(=\emph{nodes}) της 
+	κατασκευής, $n=1, 
+	\dots,\num{nodes}$.
+	\item Αρίθμούμε τα \emph{στοιχεία}(=\emph{elements})\footnote{
+	οι όροι \emph{στοιχείo}, \emph{μέλος} και οι αντίστοιχοι αγγλικοί 
+	όροι \emph{element} και \emph{member} είναι απολύτως ισοδύναμοι 
+	όταν αφορούν την υποδιαίρεση ενός φορέα σε τμήματα.} του φορέα, 
+	$i=1, \dots, \num{elements}$.
+	\item Αριθμούμε τους καθολικούς \emph{βαθμούς ελευθερίας}(=β.ε. ή 
+	dofs), $d=1, \dots, \num{dofs}$,
+	των κόμβων της κατασκευής.
+
+	\item Ορίζουμε το \emph{τοπικό σύστημα αναφοράς} $\ls$ 
+	για κάθε στοιχείο.
+\end{enumerate}
+
+\subsection{Μεγέθη στοιχείου}
+Οι διαστάσεις των μεγεθών του στοιχείου 
+εξαρτώνται από τον τύπο του 
+μέλους (δοκός2Δ, δικτύωμα3Δ κλπ.) και συγκεκριμένα 
+από τον πλήθος των 
+β.ε. $\num{dofs}^i$, δηλαδή
+\begin{itemize}
+	\item κάθε διάνυσμα στοιχείου $\vect{w^i}$ θα έχει διάσταση 
+	$\num{dofs}^i \times 1$.
+	\item κάθε τετραγωνικός πίνακας στοιχείου $\mat{W^i}$ θα έχει 
+	διαστάσεις $\num{dofs}^i  \times \num{dofs}^i$
+\end{itemize}
+
+Για κάθε στοιχείο $i$, λοιπόν, του 
+φορέα, χρησιμοποιώντας τις φυσικές και γεωμετρικές σταθερές που το 
+χαρακτηρίζουν (π.χ.$E_i, L_i, \theta_i$ κλπ.) μορφώνουμε
+\begin{enumerate}
+	\item το μητρώο μετασχηματισμού από το ΚΣ στο ΤΣ
+	$ \gtol: \gs \rightarrow \ls ,$
+	\item το μητρώο στιβαρότητας του στοιχείου στο τοπικό 
+	$\lstiff{i}$ και
+ 	στo καθολικό σύστημα
+		\begin{equation}
+			\gstiff i = \gtol^T \lstiff{i} \gtol \in 
+			\mathbb{R}^{\num{dofs}^i \times \num{dofs}^i}
+		\end{equation}
+
+	\item το διάνυσμα των αντιδράσεων παγιώσεως του μέλους στο τοπικό 
+	σύστημα $\vect{A^i} $ και στο καθολικό 
+	\begin{equation}
+		\vect{\bar A^i} = \gtol^T \vect{A^i},
+	\end{equation}
+	αν στο μέλος ασκούνται ενδιάμεσες δράσεις (π.χ. 
+	συγκεντρωμένα/κατανεμημένα φορτία, θερμοκρασιακά κλπ.)
+
+\end{enumerate}
+
+Οι διαστάσεις των μεγεθών του στοιχείου 
+εξαρτώνται από τον τύπο του 
+μέλους (δοκός2Δ, δικτύωμα3Δ κλπ.) και συγκεκριμένα 
+από τον αριθμό των β.ε. τους μέλους $\num{dofs}^i$. Έτσι, 
+\begin{itemize}
+	\item κάθε διάνυσμα στοιχείου $\vect{w^i}$ θα έχει διάσταση 
+	$\num{dofs}^i \times 1$.
+	\item κάθε τετραγωνικός πίνακας στοιχείου $\mat{W^i}$ θα έχει 
+	διαστάσεις $\num{dofs}^i  \times \num{dofs}^i$
+\end{itemize} 
+
+% GLOBAL MATRICES 
+\subsection{Μεγέθη φορέα}
+Αφού ολοκληρώσαμε τα προαναφερθέντα σε επίπεδο μελών, ξεκινάμε την 
+μόρφωση του συνολικού φορέα.
+
+\begin{enumerate}
+	\item Kατασκευάζουμε το καθολικό μητρώο στιβαρότητας $\Gstiff{}$
+	 αθροίζοντες σε κάθε καθολικό β.ε. της κατασκευής την στιβαρότητα 
+	 των συμβαλλόμενων β.ε. κάθε μέλους
+	\begin{equation}
+		\subk{ij} = \sum_{i=1}^{\num{elements}} \mat{v^i} \gstiff{i} 
+		\mat{v^i}^T
+	\end{equation}
+	O πίνακας $\mat{v^i}$ τού μέλους $i$ έχει διαστάσεις $\num{dofs} 
+	\times \num{dofs}^i$ και κάθε στοιχείο του $v^i_{\mathit{lm}}$ 
+	του μέλους $i$ ισούται με την 
+	μονάδα, αν o $l$ β.ε. της κατασκευής αντιστοιχεί στον $m$ β.ε.του 
+	μέλους. Σε κάθε άλλη περίπτωση είναι μηδενικό.
+	
+	\item Κατασκευάζουμε το διάνυσμα των δράσεων παγίωσης, 
+	αθροίζοντας τα αντίστοιχα διανύσματα μελών στους καθολικούς β.ε. 
+	που αντιστοιχούν. Οι συνιστώσες του διανύσματος δράσεων παγίωσης 
+	είναι
+	\begin{equation}
+		\vect{\bar S} = \sum_{i=1}^{\num{elements}} \mat{v^i} 
+		\vect{\bar{A}^i}
+	\end{equation}
+	με τρόπο που ομοιάζει με του μητρώου στιβαρότητας.
+	
+	\item Μορφώνουμε τα διανύσματα επικόμβιων δράσεων $\vect{\bar 
+	P^{\mathit{nodal}}}$ και μετακινήσεων $\vect{\bar D}$. Το 
+	διάνυσμα 
+	των
+	τελικών δράσεων στους κόμβους προκύπτει αφού αφαιρέσουμε και τις 
+	δράσεις παγιώσεως
+	\begin{equation}
+		\vect{\bar P} = \vect{\bar P^{\mathit{nodal}}} - \vect{\bar S}
+	\end{equation}
+	\item Αν χρειαστεί, σχηματίζουμε το μητρώο περιστροφής λόγω 
+	κεκλιμένων στηρίξεων $\mat{R}$. Τα τροποποιημένα μεγέθη γίνονται
+	\begin{align}
+		&\gforce{m} = \mat{R}^T \gforce{} \\
+		&\gdisp{m} = \mat{R}^T \gdisp{} \\
+		&\Gstiff{m} = \mat{R}^T \Gstiff{} \mat{R}
+	\end{align}
+	Αν ο φορέας δεν έχει κεκλιμένη στήριξη, τότε πίνακας περιστροφής 
+	ισούται προφανώς με τον μοναδιαίο πίνακα $\mat{R}=I$.
+	
+	\item Σχηματίζουμε το μητρώο αναδιάταξης $\mat{V}$ για να 
+	χωρίσουμε τους δεσμευμένους β.ε. από τους ελεύθερους. Τα 
+	διατεταγμένα μεγέθη γίνονται
+	\begin{align}
+		&\gforce{mm} = \mat{V}^T \gforce{m} \\
+		&\gdisp{mm} = \mat{V}^T \gdisp{m} \\
+		&\Gstiff{mm} = \mat{V}^T \Gstiff{m} \mat{V} 
+	\end{align}
+\end{enumerate}
+
+\subsection{Επίλυση Φορέα}
+Η τελική εξίσωση ισορροπίας μετά τις τροποποιήσεις γράφεται
+	\begin{equation}\label{eqn:mm}
+		\gforce{mm} = \Gstiff{mm} \gdisp{mm}
+	\end{equation}
+Αναλύοντας την \ref{eqn:mm} στα αντίστοιχα υπομητρώα με βάση τους 
+\emph{ελεύθερους} (free) και \emph{δεσμευμένους} (supported) β.ε. 
+λαμβάνουμε
+	\begin{equation}
+		\mqty[ \subp{f} \\ \subp{s} ] = 
+		\mqty[ \subk{ff} & \subk{fs} \\
+		\subk{sf}& \subk{ss} ] 
+		\mqty[ \subd{f} \\ \subd{s} ]
+	\end{equation}
+και εκτελώντας τον πολλαπλασιαμό των υποπινάκων καταλήγουμε στις
+	\begin{align}
+	 	&\subp{f} = \subk{ff} \subd{f} + \subk{fs} \subd{s} 
+	 	\label{eqn:first} \\
+		&\subp{s} = \subk{sf} \subd{f} + \subk{ss} \subd{s}. 
+		\label{eqn:second}
+	\end{align}
+Λύνοντας την \ref{eqn:first} ως προς τις ελεύθερες 
+μετακινήσεις παίρνουμε την έκφραση
+	\begin{equation}
+		\subd{f} 
+		= \subk{ff}^{-1} ( \subp{f} - \subk{fs} \subd{s} ) 
+		\label{eqn:dfree} 
+		%\\
+		%&\subp{s} = \subk{sf} \subd{f} + \subk{ss} \subd{s}
+		%\label{eqn:psupp}
+	\end{equation}
+την οποία έπειτα αντικαθιστούμε στην 
+\ref{eqn:second} για να βρούμε και τις άγνωστες αντιδράσεις στους 
+δεσμευμένους β.ε.~.
+
+\subsection{Εντατικά μεγέθη}
+Από την στιγμή που έχουμε βρει τις άγνωστες μετακινήσεις και 
+αντιδράσεις μπορούμε εύκολα να υπολογίσουμε και την ένταση που 
+ασκείται στους βαθμούς ελευθερίας κάθε μέλους.
+
+\begin{enumerate}
+	\item Αρχικά μετατρέπουμε τις τροποποιημένες μετακινήσεις της 
+	κατασκευής σε 
+	\item έπειτα, βρίσκουμε ποιες καθολικές μετακινήσεις του φορέα, 
+	αντιστοιχούν στο κάθε μέλος $i$
+	\begin{equation}
+		\gdisp{i} = \mat{v^i}^T \gdisp{}
+	\end{equation}
+\end{enumerate}
+
+\end{document}
