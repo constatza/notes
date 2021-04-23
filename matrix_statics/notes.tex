@@ -90,9 +90,9 @@
 		\end{equation}
 
 	\item το διάνυσμα των αντιδράσεων παγιώσεως του μέλους στο τοπικό 
-	σύστημα $\vect{A^i} $ και στο καθολικό 
+	σύστημα $\vect{A_r^i} $ και στο καθολικό 
 	\begin{equation}
-		\vect{\bar A^i} = \gtol^T \vect{A^i},
+		\vect{\bar A_r^i} = \gtol^T \vect{A_r^i},
 	\end{equation}
 	αν στο μέλος ασκούνται ενδιάμεσες δράσεις (π.χ. 
 	συγκεντρωμένα/κατανεμημένα φορτία, θερμοκρασιακά κλπ.)
@@ -135,7 +135,7 @@
 	είναι
 	\begin{equation}
 		\vect{\bar S} = \sum_{i=1}^{\num{elements}} \mat{v^i} 
-		\vect{\bar{A}^i}
+		\vect{\bar{A}_r^i}
 	\end{equation}
 	με τρόπο που ομοιάζει με του μητρώου στιβαρότητας.
 	
@@ -210,11 +210,28 @@
 
 \begin{enumerate}
 	\item Αρχικά μετατρέπουμε τις τροποποιημένες μετακινήσεις της 
-	κατασκευής σε 
-	\item έπειτα, βρίσκουμε ποιες καθολικές μετακινήσεις του φορέα, 
-	αντιστοιχούν στο κάθε μέλος $i$
+	κατασκευής σε καθολικές
 	\begin{equation}
-		\gdisp{i} = \mat{v^i}^T \gdisp{}
+		\gdisp{} =\mat{R} \mat{V} \gdisp{mm}.
+	\end{equation}
+		
+	\item Έπειτα, βρίσκουμε ποιες καθολικές μετακινήσεις του φορέα, 
+	αντιστοιχούν σε κάθε μέλος $i$
+	\begin{equation}
+		\gdisp{i} = \mat{v^i}^T \gdisp{}.
+	\end{equation}
+	Οι διαστάσεις του $\gdisp{i}$ είναι $\num{dofs}^i \times 1$.
+	
+	\item Η τελική ένταση στους β.ε. του μέλους προκύπτει από την 
+	επαλληλία των τοπικών δράσεων του μέλους του παγιωμένου και του 
+	ισοδύναμου φορέα.
+	\begin{equation}
+		\vect{A^i} = \vect{A^i_r} + \vect{A^i_e}
+	\end{equation}
+	όπου οι δράσεις του ισοδύναμου φορέα δίνονται από την
+	\begin{equation}
+		\vect{A^i_e} = \lstiff{i} \mat{D^i}
+		= \lstiff{i} \mat{\Lambda^i} \gdisp{i}.
 	\end{equation}
 \end{enumerate}
 
